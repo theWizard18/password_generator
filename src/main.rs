@@ -1,5 +1,6 @@
-use rand::{ Rng, thread_rng };
 use std::env;
+use rand::thread_rng;
+use rand::seq::SliceRandom;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -15,7 +16,8 @@ fn main() {
             args.contains(&String::from("no-up")),
             args.contains(&String::from("no-low")),
             args.contains(&String::from("no-num")),
-            args.contains(&String::from("no-spc")));
+            args.contains(&String::from("no-spc"))
+        );
 
         let length = match args.len() {
             1 => 16,
@@ -65,8 +67,8 @@ fn password_gen( len: u8, chars: Vec<char>) {
     let mut password = String::new();
     let mut chr;
     for _i in 0..len {
-        chr = chars[thread_rng().gen_range(0, chars.len())] as char;
-        password.push_str(&String::from(chr));
+        chr = chars.choose(&mut thread_rng()).unwrap();
+        password.push(*chr);
     };
     println!("{}", password);
 }
